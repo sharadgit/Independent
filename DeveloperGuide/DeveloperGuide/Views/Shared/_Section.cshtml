@@ -1,0 +1,36 @@
+﻿@model DGuide.Infrastructure.Models.Section
+@using DGuide.Infrastructure.Core
+
+<div class="article-section">
+    <h4>
+        @Model.Header
+    </h4>
+    <div class="article-section-content">
+        @if (Model.ContentFormat == DataFormat.HTML)
+        {
+            @Html.Raw(Model.Content)
+        }
+        else
+        {
+            <p>
+                @Model.Content
+            </p>
+        }
+    </div>
+
+    <div class="article-section-document">
+        @if (Model.DbDocumentId != null)
+        {
+            <img src="@Url.Action("LoadDocument", "Section",
+                                new { dbDocumentId = Model.DbDocumentId })" />
+        }
+    </div>
+
+    @if (User.IsInRole(DGuideAuthorize.Administrators))
+    {
+    <div>
+        @Html.ActionLink("Edit", "Edit", "Section", new { id = Model.Id }, null) |
+        @Html.ActionLink("Delete", "Delete", "Section", new { id = Model.Id }, null)
+    </div>
+    }
+</div>

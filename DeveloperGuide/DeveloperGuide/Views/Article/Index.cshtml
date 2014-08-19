@@ -1,0 +1,47 @@
+﻿@model PagedList.IPagedList<DGuide.Infrastructure.Models.Article>
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Articles";
+}
+@*@using (Ajax.BeginForm(
+        new AjaxOptions
+        {
+            HttpMethod = "get",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "#articleList"
+        }))
+    {
+        <input type="search" name="SearchString" value="@ViewBag.CurrentFilter" data-dguide-autocomplete="@Url.Action("AutocompleteArticle")" />
+        <input type="submit" value="Search By Title" class="btn btn-primary btn-large" />
+    }*@
+
+@*<form method="get" action="@Url.Action("Index")"
+          data-dguide-ajax="true" data-dguide-target="#articleList">
+
+        <input type="search" name="SearchString" data-dguide-autocomplete="@Url.Action("AutocompleteArticle")" />
+        <input type="submit" value="Search By Title" class="btn btn-primary btn-large" />
+    </form>*@
+<div class="search-Title">
+    <form method="get" action="@Url.Action("Index")"
+          data-dguide-ajax="true" data-dguide-target="#articleList">
+        <input type="search" name="SearchString" value="@ViewBag.CurrentFilter" data-dguide-autocomplete="@Url.Action("AutocompleteArticle")" />
+        <input type="submit" value="Search" class="btn btn-primary btn-large" />
+    </form>
+</div>
+
+@if (User.IsInRole(DGuide.Infrastructure.Core.DGuideAuthorize.Administrators))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
+else
+{
+    //Please clean this if you can. I could not get the div tags to behave.
+    <p>&nbsp;</p>
+}
+
+@Html.Partial("_ArticleList", Model)
+

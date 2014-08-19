@@ -1,0 +1,13 @@
+﻿@model DGuide.Infrastructure.Models.Question
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Editing Question</h2>
+
+@Html.Partial("_QuestionEditor", Model)
+
+<div>
+    @Html.ActionLink("Back to Questions", "Index")
+</div>

@@ -1,0 +1,13 @@
+﻿@model DGuide.Infrastructure.Models.Article
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create New Article</h2>
+
+@Html.Partial("_ArticleEditor", Model)
+
+<div>
+    @Html.ActionLink("Back to Articles", "Index")
+</div>

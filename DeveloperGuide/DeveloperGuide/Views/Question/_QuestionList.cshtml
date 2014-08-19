@@ -1,0 +1,94 @@
+﻿@model PagedList.IPagedList<DGuide.Infrastructure.Models.Question>
+@using DGuide.Infrastructure.Core;
+@using PagedList.Mvc;
+
+<div id="questionList">
+
+    <div class="sort-Buttons">
+        <div class="sort-link">
+            @Html.ActionLink("Modification", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+        </div>
+        <div class="sort-link">
+            @Html.ActionLink("Votes", "Index", new { sortOrder = ViewBag.VotesSortParm, currentFilter = ViewBag.CurrentFilter })
+        </div>
+        <div class="sort-link">
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter })
+        </div>
+        @* All styles need to go in Site.css file. I am being lazy here. *@
+        <p style="float: right; padding: 4px 4px;">Order by</p>
+    </div>
+
+    @if (Model.Count() == 0)
+    {
+        <div class="article-index-item">
+            <h3>No matching results</h3>
+            <p>Please change your search term and try again.</p>
+        </div>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <div class="question-index-item">
+                <h3>
+                    @Html.ActionLink(item.Header, "Details", new { id = item.Id, searchString = @ViewBag.CurrentFilter })
+                </h3>
+                @if(item.ContentFormat == DataFormat.TEXT)
+                {
+                    <p>
+                        @Html.DisplayFor(modelItem => item.Content)
+                    </p> 
+                }
+                else
+                {
+                    <p>(Description in question detail.)</p>
+                }
+                <strong>
+                    @Html.DisplayFor(modelItem => item.Tags)
+                </strong>
+                <em class="author-timestamp">
+                    by @item.Author - @item.TimeStamp.ToShortDateString()
+                </em>            
+                @if (item.Answers.Count() > 0)
+                {
+                    <br/>
+                    <small class="answers-count">
+                        <span>&nbsp;</span>
+                        <span>
+                            @item.Answers.Count()
+                        </span>
+                        <span>
+                            Answer(s)
+                        </span>
+                    </small>
+                }
+                @if (item.Votes > 0)
+                {
+                    <br/>
+                    <small class="votes-count">
+                        <span>
+                            @item.Votes
+                        </span>
+                        <span>
+                            Vote(s)
+                        </span>
+                    </small>
+                }
+                <hr />
+            </div>
+        }
+
+        @:Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    }
+
+    @*<div>
+        <p>
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter })
+        </p>
+        <p>
+            @Html.ActionLink("Modified Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+        </p>
+    </div>*@
+</div>

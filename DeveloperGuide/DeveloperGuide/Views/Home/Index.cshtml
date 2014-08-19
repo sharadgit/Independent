@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Developer Guide</h1>
+    <p class="lead">Developer Guide is a knowledge base for building applications using C#, and T-SQL.</p>
+    @using (Html.BeginForm("Index", "Article", FormMethod.Get))
+    {
+        <p>
+            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Get Started" class="btn btn-primary btn-large" />
+        </p>
+    }
+
+    @*<p><a href="http://asp.net" class="btn btn-primary btn-large">Learn more &raquo;</a></p>*@
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Learn from Articles</h2>
+        <p>
+            Developer Guide contains a wealth of information that was accumulated over the years. Learn from the 
+            articles on .Net, SQL, Business Function, Best Practices, and many others.
+        </p>
+        @using (Html.BeginForm("Index", "Article", FormMethod.Get))
+        {
+            <p>
+                <input type="submit" value="Go to Articles &raquo;" class="btn btn-default" />
+            </p>
+        }
+    </div>
+    <div class="col-md-4">
+        <h2>Ask a Question</h2>
+        <p>You can ask a question. You may find that a similar question has been answered already. You can answer an open question or improve an answer.</p>
+        @using (Html.BeginForm("Index", "Question", FormMethod.Get))
+        {
+            <p>
+                <input type="submit" value="Go to Questions &raquo;" class="btn btn-default" />
+            </p>
+        }
+    </div>
+    <div class="col-md-4">
+        <h2>Contribute</h2>
+        <p>You can create your own articles, edit existing articles, ask new questions, and answer existing questions.</p>
+        @using (Html.BeginForm("About", "Home", FormMethod.Get))
+        {
+            <p>
+                <input type="submit" value="Go to About &raquo;" class="btn btn-default" />
+            </p>
+        }
+    </div>
+</div>

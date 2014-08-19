@@ -1,0 +1,51 @@
+﻿@model DGuide.Infrastructure.Models.Answer
+
+<div class="answer-detail" style="margin: 4px;">
+    <div class="answer-detail-votes" style="float: left;">
+        @using (Html.BeginForm("UpVote", "Answer", new { id = Model.Id }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @*@Html.HiddenFor(model => model.Id)*@
+            <input type="submit" value="Up" class="btn btn-default" />
+        }
+
+        <div id="answer-votes">
+            <h4>@Model.Votes</h4>
+        </div>
+
+        @using (Html.BeginForm("DownVote", "Answer", new { id = Model.Id }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @*@Html.HiddenFor(model => model.Id)*@
+            <input type="submit" value="Dn" class="btn btn-default" />
+        }
+    </div>
+    <div class="answer-detail-content" style="margin-left: 60px;">
+        @if (Model.ContentFormat == DGuide.Infrastructure.Core.DataFormat.HTML)
+        {
+            @Html.Raw(Model.Content)
+        }
+        else
+        {
+            <p>
+                @Model.Content
+            </p>
+        }
+
+        @if (User.IsInRole(DGuide.Infrastructure.Core.DGuideAuthorize.Administrators))
+        {
+            <div class="answer-detail-editdelete">
+                @Html.ActionLink("Edit", "Edit", "Answer", new { id = Model.Id }, null) |
+                @Html.ActionLink("Delete", "Delete", "Answer", new { id = Model.Id }, null)
+            </div>
+        }
+        <small class="author-timestamp">
+            answered:
+            @Html.DisplayFor(modelItem => Model.Author)
+            on
+            @Html.DisplayFor(modelItem => Model.TimeStamp)
+        </small>
+    </div>
+    <div style="clear: both;"> </div>
+    <hr />
+</div>

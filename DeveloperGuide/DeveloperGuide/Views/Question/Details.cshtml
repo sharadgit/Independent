@@ -1,0 +1,77 @@
+﻿@model DGuide.Infrastructure.Models.Question
+@using DGuide.Infrastructure.Core;
+@{
+	ViewBag.Title = "Details";
+}
+
+<div id="questionDetail">
+	<h3>@Model.Header</h3>
+		<div class="votes" style="float: left;">
+			@using (Html.BeginForm("UpVote", "Question", FormMethod.Post))
+			{
+				@Html.AntiForgeryToken()
+				@Html.HiddenFor(model => model.Id)
+				<input type="submit" value="Up" class="btn btn-default" />
+			}
+			<h4>@Model.Votes</h4>
+			@using (Html.BeginForm("DownVote", "Question", FormMethod.Post))
+			{
+				@Html.AntiForgeryToken()
+				@Html.HiddenFor(model => model.Id)
+				<input type="submit" value="Dn" class="btn btn-default" />
+			}
+		</div>
+
+		<div class="question-details-content" style="margin-left: 70px; margin-top: 30px;">
+			<div>
+				@if (Model.ContentFormat == DataFormat.HTML)
+				{
+					@Html.Raw(Model.Content)
+				}
+				else
+				{
+					<p>
+						@Model.Content
+					</p>
+				}
+			</div>
+			<strong>
+				@Html.DisplayFor(model => model.Tags)
+			</strong>
+			<br />
+			<small class="author-timestamp">
+				asked:
+				@Html.DisplayFor(model => model.Author)
+				on
+				@Html.DisplayFor(model => model.TimeStamp)
+			</small>
+		</div>
+		
+	<div id="answers">
+		<h3>Answers</h3>
+		<hr />
+		<table>
+			@foreach (var item in Model.Answers)
+			{
+				<tr>
+					@Html.Partial("_Answer", item)
+				</tr>
+			}
+		</table>
+	</div>
+</div>
+<div>
+	<p>
+		@Html.ActionLink("Back to Questions", "Index")
+		@if (User.IsInRole(DGuideAuthorize.Administrators))
+		{
+			@:|
+			@Html.ActionLink("Edit Question", "Edit", new { id = Model.Id })
+		}
+		@if (User.IsInRole(DGuideAuthorize.Administrators) || User.IsInRole(DGuideAuthorize.Users))
+		{
+			@:|
+			@Html.ActionLink("Answer Question", "Create", "Answer", new { QuestionId = Model.Id }, null)
+		}
+	</p>
+</div>

@@ -1,0 +1,70 @@
+﻿@model DGuide.Infrastructure.Models.Article
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@if (User.IsInRole(DGuide.Infrastructure.Core.DGuideAuthorize.Administrators))
+{
+    @Html.ActionLink("Edit Current Article", "Edit", new { id = Model.Id })
+    @:|
+    @Html.ActionLink("Add New Section", "Create", "Section", new { ArticleId = Model.Id }, null)
+}
+
+<div id="article-detail">
+    @if (Model.DbVersion != null)
+    {
+        <dl class="article-version">
+            <dt>
+                @Html.DisplayNameFor(model => model.DbVersion.Version)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DbVersion.Version)
+            </dd>
+        </dl>        
+    }
+
+    <h2>@Model.Title</h2>
+
+    <small class="author-timestamp">
+        @Html.DisplayFor(model => model.Author)
+        @Html.DisplayFor(model => model.TimeStamp)
+    </small>
+
+    <p>@Model.Description</p>
+
+    @foreach (var item in Model.Sections.OrderBy(s => s.Sequence))
+    {
+        @Html.Partial("_Section", item)
+    }
+</div>
+
+<br />
+
+@using (Html.BeginForm("UpVote", "Article", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()        
+    @Html.HiddenFor(model => model.Id)
+    <input type="submit" value="Like" class="btn btn-default" style="float: left;" />
+}
+
+@using (Html.BeginForm("DownVote", "Article", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    <input type="submit" value="Dislike" class="btn btn-default" style="float: left;" />
+}
+<br />
+<br />
+<div>
+    <p>
+        @Html.ActionLink("Back to Articles", "Index")
+        @if (User.IsInRole(DGuide.Infrastructure.Core.DGuideAuthorize.Administrators))
+        {
+            @:|
+            @Html.ActionLink("Edit Current Article", "Edit", new { id = Model.Id })
+            @:|
+            @Html.ActionLink("Add New Section", "Create", "Section", new { ArticleId = Model.Id }, null)
+        }
+    </p>
+</div>

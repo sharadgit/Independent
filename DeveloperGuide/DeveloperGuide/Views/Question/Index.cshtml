@@ -1,0 +1,56 @@
+﻿@model PagedList.IPagedList<DGuide.Infrastructure.Models.Question>
+@using DGuide.Infrastructure.Core;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Questions";
+}
+
+<div class="search-Title">
+    <form method="get" action="@Url.Action("Index")"
+          data-dguide-ajax="true" data-dguide-target="#questionList">
+        <input type="search" name="SearchString" value="@ViewBag.CurrentFilter" data-dguide-autocomplete="@Url.Action("AutocompleteArticle")" />
+        <input type="submit" value="Search" class="btn btn-primary btn-large" />
+    </form>
+</div>
+
+@*Alternative method*@
+@*<form method="get" action="@Url.Action("Index")"
+            data-dguide-ajax="true" data-dguide-target="#questionList">
+        <input type="search" name="SearchString" value="@ViewBag.CurrentFilter" data-dguide-autocomplete="@Url.Action("AutocompleteArticle")" />
+        <input type="submit" value="Search" class="btn btn-primary btn-large" />
+    </form>*@
+
+@*Full page*@
+@*@using (Html.BeginForm("Index", "Question", FormMethod.Get))
+    {
+        <div>
+            <p>
+                @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                <input type="submit" value="Search" class="btn btn-primary btn-large" />
+            </p>
+
+        </div>
+    }*@
+
+@if (User.IsInRole(DGuideAuthorize.Administrators) || User.IsInRole(DGuideAuthorize.Users))
+{
+    <p>
+        @Html.ActionLink("Ask a Question", "Create")
+    </p>
+}
+else
+{
+    //Please clean this if you can. I could not get the div tags to behave.
+    <p>&nbsp;</p>
+}
+
+@Html.Partial("_QuestionList", Model)
+
+@*<div id="question-Tag">
+    @foreach (var item in ViewBag.ItemTags)
+    {
+        <p>@item.Tag</p>
+    }
+</div>*@

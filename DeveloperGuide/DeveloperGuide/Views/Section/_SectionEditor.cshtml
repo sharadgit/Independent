@@ -1,0 +1,87 @@
+﻿@model DGuide.Infrastructure.Models.Section
+
+@using (Html.BeginForm("Edit", "Section", FormMethod.Post,
+    new { enctype = "multipart/form-data" } ))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+
+        <div>
+            @Html.HiddenFor(model => model.ArticleId)
+        </div>
+
+        <div>
+            @Html.HiddenFor(model => model.DbDocumentId)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sequence, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Sequence)
+                @Html.ValidationMessageFor(model => model.Sequence)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Header, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Header)
+                @Html.ValidationMessageFor(model => model.Header)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContentFormat, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.ContentFormat)
+                @Html.ValidationMessageFor(model => model.ContentFormat)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Content, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Content)
+                @Html.ValidationMessageFor(model => model.Content)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Current Document</label>
+            <div class="col-md-10">
+                @if (Model.DbDocumentId == null)
+                {
+                    @:None
+                }
+                else
+                {
+                    <img src="@Url.Action("LoadDocument", "Section",
+                                new { dbDocumentId = Model.DbDocumentId })" />
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Upload new document</label>
+            <div class="col-md-10"><input type="file" name="uploadedDocument" /></div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to Article", "Details", "Article", new { Id = @Model.ArticleId }, null)
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
